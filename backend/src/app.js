@@ -8,12 +8,17 @@ dotenv.config();
 
 const app = express();
 
+
+
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://expense-track.vercel.app'
+    'https://expense-track-virat.vercel.app' // <-- replace with your exact Vercel URL
   ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Idempotency-Key'],
 }));
+
 
 app.use(express.json());
 
