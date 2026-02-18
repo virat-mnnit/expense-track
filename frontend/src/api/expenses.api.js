@@ -1,4 +1,5 @@
-const BASE_URL = 'http://localhost:4000';
+const BASE_URL = 'https://expense-track-8wwa.onrender.com';
+
 
 export async function fetchExpenses({ category, sort }) {
   const params = new URLSearchParams();
