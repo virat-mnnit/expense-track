@@ -8,10 +8,20 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://expense-track.vercel.app'
+  ],
+}));
+
 app.use(express.json());
 
 app.use('/expenses', expensesRoutes);
+app.get('/', (req, res) => {
+  res.send('Expense Tracker API is running');
+});
+
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
