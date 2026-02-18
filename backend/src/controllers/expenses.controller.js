@@ -21,17 +21,29 @@ export const createExpense = async (req, res, next) => {
   }
 };
 
-export const getExpenses = async (req, res, next) => {
+export async function getExpenses(req, res) {
   try {
     const { category, sort } = req.query;
 
-    const filter = category ? { category } : {};
-    const sortBy = sort === 'date_desc' ? { date: -1 } : {};
+    const query = {};
 
-    const expenses = await Expense.find(filter).sort(sortBy);
+    if (category) {
+      query.category = {
+        $regex: new RegExp(`^${category.trim()}$`, 'i') // exact match, case-insensitive
+      };
+    }
 
+    let q = Expense.find(query);
+
+    if (sort === 'date_desc') {
+      q = q.sort({ date: -1 });
+    }
+
+    const expenses = await q.exec();
     res.json(expenses);
   } catch (err) {
-    next(err);
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
+
