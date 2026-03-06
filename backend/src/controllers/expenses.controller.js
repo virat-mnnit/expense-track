@@ -21,7 +21,11 @@ export const createExpense = async (req, res, next) => {
   }
 };
 
-export async function getExpenses(req, res) {
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+export async function getExpenses(req, res, next) {
   try {
     const { category, sort } = req.query;
 
@@ -29,7 +33,7 @@ export async function getExpenses(req, res) {
 
     if (category) {
       query.category = {
-        $regex: new RegExp(`^${category.trim()}$`, 'i') // exact match, case-insensitive
+        $regex: new RegExp(`^${escapeRegex(category.trim())}$`, 'i') // exact match, case-insensitive
       };
     }
 
@@ -37,13 +41,14 @@ export async function getExpenses(req, res) {
 
     if (sort === 'date_desc') {
       q = q.sort({ date: -1 });
+    } else if (sort === 'date_asc') {
+      q = q.sort({ date: 1 });
     }
 
     const expenses = await q.exec();
     res.json(expenses);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    next(err);
   }
 }
 
