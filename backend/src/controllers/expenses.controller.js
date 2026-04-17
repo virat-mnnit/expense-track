@@ -28,8 +28,9 @@ export async function getExpenses(req, res) {
     const query = {};
 
     if (category) {
+      const escaped = category.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       query.category = {
-        $regex: new RegExp(`^${category.trim()}$`, 'i') // exact match, case-insensitive
+        $regex: new RegExp(`^${escaped}$`, 'i') // exact match, case-insensitive
       };
     }
 
