@@ -1,8 +1,3 @@
-<h1 className="text-6xl font-black text-red-600">
-  TAILWIND ACTIVE
-</h1>
-
-
 import ExpenseForm from './components/ExpenseForm';
 
 import ExpenseList from './components/ExpenseList';
